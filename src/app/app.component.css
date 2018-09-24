@@ -1,0 +1,13 @@
+.icon {
+    padding: 0 14px;   
+}
+
+table {
+    margin-inline-end: 1%;
+    padding: 1%;
+    width: 100%;
+}
+
+td, th {
+    width: 25%;
+  }
