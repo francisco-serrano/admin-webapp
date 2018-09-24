@@ -2,12 +2,22 @@
     padding: 0 14px;   
 }
 
+.card {
+    margin: 1%;
+    width: 100%;
+}
+
+.table-container {
+    margin: 1%;
+}
+
 table {
-    margin-inline-end: 1%;
     padding: 1%;
     width: 100%;
 }
 
-td, th {
-    width: 25%;
-  }
+mat-form-field {
+    margin-right: 1%;
+    width: 15%;
+}
+

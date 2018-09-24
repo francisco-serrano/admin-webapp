@@ -1,34 +1,43 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
-export interface PeriodicElement {
+export interface PeopleData {
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  c1: number;
+  c2: number;
+  c3: number;
+  c4: number;
+  c5: number;
+  c6: number;
+  c7: number;
+  c8: number;
+  c9: number;
+  c10: number;
+  c11: number;
+  c12: number;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
+const SAMPLE_PEOPLE_DATA: PeopleData[] = [
+  {name: 'Persona 1', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 2', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 3', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 4', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 5', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 6', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 7', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 8', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 9', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 10', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 11', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 12', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 13', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 14', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 15', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 16', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 17', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 18', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 19', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0},
+  {name: 'Persona 20', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0}
 ];
 
 @Component({
@@ -38,8 +47,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class AppComponent implements OnInit {
   title = 'admin-webapp';
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+
+  displayedColumns: string[] = ['name', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12'];
+  dataSource = new MatTableDataSource<PeopleData>(SAMPLE_PEOPLE_DATA);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
