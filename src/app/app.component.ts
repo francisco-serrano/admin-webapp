@@ -4,43 +4,39 @@ import { HttpClient } from '@angular/common/http';
 import { String } from 'typescript-string-operations';
 
 export interface PeopleData {
-  name: string;
-  c1: number;
-  c2: number;
-  c3: number;
-  c4: number;
-  c5: number;
-  c6: number;
-  c7: number;
-  c8: number;
-  c9: number;
-  c10: number;
-  c11: number;
-  c12: number;
+  integrante: string;
+  C1: number;
+  C2: number;
+  C3: number;
+  C4: number;
+  C5: number;
+  C6: number;
+  C7: number;
+  C8: number;
+  C9: number;
+  C10: number;
+  C11: number;
+  C12: number;
+  R1: number;
+  R2: number;
+  R3: number;
+  R4: number;
+  ROL_1: number;
+  ROL_2: number;
+  ROL_3: number;
+  ROL_4: number;
+  ROL_5: number;
+  ROL_6: number;
+  ROL_7: number;
+  ROL_8: number;
+  ROL_9: number;
+  Dominante: number;
+  Sumiso: number;
+  Amistoso: number;
+  NoAmistoso: number;
+  Tarea: number;
+  SocioEmocional: number;
 }
-
-const SAMPLE_PEOPLE_DATA: PeopleData[] = [
-  { name: 'Persona 1', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 2', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 3', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 4', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 5', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 6', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 7', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 8', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 9', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 10', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 11', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 12', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 13', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 14', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 15', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 16', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 17', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 18', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 19', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 },
-  { name: 'Persona 20', c1: 30, c2: 42, c3: 181, c4: 11, c5: 4, c6: 123, c7: 3, c8: 1, c9: 1, c10: 2, c11: 1, c12: 0 }
-];
 
 @Component({
   selector: 'app-root',
@@ -50,8 +46,11 @@ const SAMPLE_PEOPLE_DATA: PeopleData[] = [
 export class AppComponent implements OnInit {
   title = 'admin-webapp';
 
-  displayedColumns: string[] = ['name', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12'];
-  dataSource = new MatTableDataSource<PeopleData>(SAMPLE_PEOPLE_DATA);
+  displayedColumnsConductas: string[] = ['integrante', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12'];
+  displayedColumnsReacciones: string[] = ['integrante', 'R1', 'R2', 'R3', 'R4'];
+  displayedColumnsRoles: string[] = ['integrante', 'ROL_1', 'ROL_2', 'ROL_3', 'ROL_4', 'ROL_5', 'ROL_6', 'ROL_7', 'ROL_8', 'ROL_9'];
+  displayedColumnsSymlog: string[] = ['integrante', 'Dominante', 'Sumiso', 'Amistoso', 'NoAmistoso', 'Tarea', 'SocioEmocional'];
+  dataSource: MatTableDataSource<PeopleData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
@@ -80,13 +79,75 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.paginator = this.paginator;
   }
 
   consultaResultados() {
-    console.log(
-      String.Format('consulta de resultados con los valoress {0} y {1}', this.nombreTabla, this.nombreIntegrante)
-    );
+    console.log(String.Format('consulta de resultados con los valoress {0} y {1}',
+      this.nombreTabla,
+      this.nombreIntegrante
+    ));
+
+    let url = String.Format('http://localhost:8080/results/{0}/{1}', this.nombreTabla, this.nombreIntegrante);
+
+    if (this.nombreIntegrante === 'undefined' ||  this.nombreIntegrante === '') {
+      url = String.Format('http://localhost:8080/results/{0}', this.nombreTabla);
+    }
+
+    this.http.get(url).subscribe(res => {
+      this.parseResponse(res);
+    });
+  }
+
+  parseResponse(res) {
+    const json = JSON.parse(JSON.stringify(res));
+
+    console.log(json[0]);
+
+    const conductas: PeopleData[] = [];
+    for (const entry of json) {
+      const person = {
+        integrante: entry['integrante'],
+        C1: entry['C1'],
+        C2: entry['C2'],
+        C3: entry['C3'],
+        C4: entry['C4'],
+        C5: entry['C5'],
+        C6: entry['C6'],
+        C7: entry['C7'],
+        C8: entry['C8'],
+        C9: entry['C9'],
+        C10: entry['C10'],
+        C11: entry['C11'],
+        C12: entry['C12'],
+        R1: entry['R1'],
+        R2: entry['R2'],
+        R3: entry['R3'],
+        R4: entry['R4'],
+        ROL_1: entry['ROL 1'],
+        ROL_2: entry['ROL 2'],
+        ROL_3: entry['ROL 3'],
+        ROL_4: entry['ROL 4'],
+        ROL_5: entry['ROL 5'],
+        ROL_6: entry['ROL 6'],
+        ROL_7: entry['ROL 7'],
+        ROL_8: entry['ROL 8'],
+        ROL_9: entry['ROL 9'],
+        Dominante: entry['Dominante'],
+        Sumiso: entry['Sumiso'],
+        Amistoso: entry['Amistoso'],
+        NoAmistoso: entry['No-Amistoso'],
+        Tarea: entry['Tarea'],
+        SocioEmocional: entry['Socio-Emocional'],
+      };
+
+      conductas.push(person);
+    }
+
+    console.log(conductas[0]);
+
+    this.dataSource = new MatTableDataSource<PeopleData>(conductas);
+    this.dataSource.paginator = this.paginator;
   }
 
   clasificacionARFF() {
