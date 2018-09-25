@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { HttpClient } from '@angular/common/http';
 
 export interface PeopleData {
   name: string;
@@ -55,7 +56,27 @@ export class AppComponent implements OnInit {
 
   clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
 
+  selectedFile: File = null;
+
+  constructor(private http: HttpClient) { }
+
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  onFileSelected(event) {
+    this.selectedFile = <File>event.target.files[0];
+    console.log(this.selectedFile);
+  }
+
+  onUpload() {
+    const fd = new FormData();
+    fd.append('zipFile', this.selectedFile, this.selectedFile.name);
+    fd.append('cantidad_mensajes', '10');
+
+    this.http.post('http://localhost:8080/neuralnetwork/clasificar_arff', fd)
+      .subscribe(res => {
+        console.log(res);
+      });
   }
 }

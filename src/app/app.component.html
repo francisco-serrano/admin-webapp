@@ -4,6 +4,9 @@
   <mat-icon class="icon">menu</mat-icon>
 </mat-toolbar>
 
+<input type="file" (change)="onFileSelected($event)">
+<button type="button" (click)="onUpload()">Upload</button>
+
 <mat-card class="card">
   <mat-card-header>
     <mat-card-title>Consulta de Resultados</mat-card-title>
