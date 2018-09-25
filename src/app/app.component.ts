@@ -90,7 +90,7 @@ export class AppComponent implements OnInit {
 
     let url = String.Format('http://localhost:8080/results/{0}/{1}', this.nombreTabla, this.nombreIntegrante);
 
-    if (this.nombreIntegrante === 'undefined' ||  this.nombreIntegrante === '') {
+    if (this.nombreIntegrante === 'undefined' || this.nombreIntegrante === '') {
       url = String.Format('http://localhost:8080/results/{0}', this.nombreTabla);
     }
 
@@ -108,37 +108,14 @@ export class AppComponent implements OnInit {
     for (const entry of json) {
       const person = {
         integrante: entry['integrante'],
-        C1: entry['C1'],
-        C2: entry['C2'],
-        C3: entry['C3'],
-        C4: entry['C4'],
-        C5: entry['C5'],
-        C6: entry['C6'],
-        C7: entry['C7'],
-        C8: entry['C8'],
-        C9: entry['C9'],
-        C10: entry['C10'],
-        C11: entry['C11'],
-        C12: entry['C12'],
-        R1: entry['R1'],
-        R2: entry['R2'],
-        R3: entry['R3'],
-        R4: entry['R4'],
-        ROL_1: entry['ROL 1'],
-        ROL_2: entry['ROL 2'],
-        ROL_3: entry['ROL 3'],
-        ROL_4: entry['ROL 4'],
-        ROL_5: entry['ROL 5'],
-        ROL_6: entry['ROL 6'],
-        ROL_7: entry['ROL 7'],
-        ROL_8: entry['ROL 8'],
-        ROL_9: entry['ROL 9'],
-        Dominante: entry['Dominante'],
-        Sumiso: entry['Sumiso'],
-        Amistoso: entry['Amistoso'],
-        NoAmistoso: entry['No-Amistoso'],
-        Tarea: entry['Tarea'],
-        SocioEmocional: entry['Socio-Emocional'],
+        C1: entry['C1'], C2: entry['C2'], C3: entry['C3'], C4: entry['C4'], C5: entry['C5'], C6: entry['C6'], C7: entry['C7'],
+        C8: entry['C8'], C9: entry['C9'], C10: entry['C10'], C11: entry['C11'], C12: entry['C12'],
+        R1: entry['R1'], R2: entry['R2'], R3: entry['R3'], R4: entry['R4'],
+        ROL_1: entry['ROL 1'], ROL_2: entry['ROL 2'], ROL_3: entry['ROL 3'], ROL_4: entry['ROL 4'], ROL_5: entry['ROL 5'],
+        ROL_6: entry['ROL 6'], ROL_7: entry['ROL 7'], ROL_8: entry['ROL 8'], ROL_9: entry['ROL 9'],
+        Dominante: entry['Dominante'], Sumiso: entry['Sumiso'],
+        Amistoso: entry['Amistoso'], NoAmistoso: entry['No-Amistoso'],
+        Tarea: entry['Tarea'], SocioEmocional: entry['Socio-Emocional'],
       };
 
       conductas.push(person);
@@ -156,6 +133,18 @@ export class AppComponent implements OnInit {
       this.clasificadorSeleccionadoArff,
       this.selectedFileArff.name
     ));
+
+    const form = new FormData();
+    form.append('zipFile', this.selectedFileArff);
+    form.append('cantidad_mensajes', this.cantidadMensajesArff.toString());
+
+    const url = 'http://localhost:8080/neuralnetwork/clasificar_arff';
+
+    if (this.clasificadorSeleccionadoArff === 'Red Neuronal (Enfoque 1)') {
+      this.http.post(url, form).subscribe(res => {
+        console.log(res);
+      });
+    }
   }
 
   clasificacionTakeout() {
@@ -164,6 +153,18 @@ export class AppComponent implements OnInit {
       this.clasificadorSeleccionadoTakeout,
       this.selectedFileTakeout.name
     ));
+
+    const form = new FormData();
+    form.append('zipFile', this.selectedFileTakeout);
+    form.append('cantidad_mensajes', this.cantidadMensajesTakeout.toString());
+
+    const url = 'http://localhost:8080/neuralnetwork/clasificar_takeout';
+
+    if (this.clasificadorSeleccionadoTakeout === 'Red Neuronal (Enfoque 1)') {
+      this.http.post(url, form).subscribe(res => {
+        console.log(res);
+      });
+    }
   }
 
   clasificacionLotr() {
@@ -174,6 +175,20 @@ export class AppComponent implements OnInit {
       this.cantidadMensajesLotr,
       this.clasificadorSeleccionadoLotr
     ));
+
+    const url = String.Format(
+      'http://localhost:8080/neuralnetwork/clasificar_lotr?db_uri={0}&db_name={1}&cantidad_chats={2}&cantidad_mensajes={3}',
+      this.uriBaseDatos,
+      this.nombreBaseDatos,
+      this.cantidadConversaciones,
+      this.cantidadMensajesLotr
+    );
+
+    if (this.clasificadorSeleccionadoLotr === 'Red Neuronal (Enfoque 1)') {
+      this.http.get(url).subscribe(res => {
+        console.log(res);
+      });
+    }
   }
 
   onFileSelectedArff(event) {
