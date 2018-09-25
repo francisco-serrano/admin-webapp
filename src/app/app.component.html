@@ -17,15 +17,15 @@
     <form>
       <mat-form-field>
         <mat-label>Nombre de tabla</mat-label>
-        <input matInput placeholder="Ingresar nombre de tabla">
+        <input matInput placeholder="Ingresar nombre de tabla" [(ngModel)]="nombreTabla" name="nombreTabla">
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Nombre de integrante</mat-label>
-        <input matInput placeholder="Ingresar nombre de integrante">
+        <input matInput placeholder="Ingresar nombre de integrante" [(ngModel)]="nombreIntegrante" name="nombreIntegrante">
       </mat-form-field>
 
-      <button mat-raised-button type="button" color="primary">Consultar Base de Datos</button>
+      <button mat-raised-button type="button" color="primary" (click)="consultaResultados()">Consultar Base de Datos</button>
     </form>
   </mat-card-content>
 </mat-card>
@@ -37,22 +37,24 @@
   </mat-card-header>
 
   <mat-card-content>
+    <input type="file" (change)="onFileSelectedArff($event)">
     <form>
       <mat-form-field>
         <mat-label>Cantidad de mensajes</mat-label>
-        <input matInput placeholder="Ingrese cantidad de mensajes">
+        <input matInput placeholder="Ingrese cantidad de mensajes" [(ngModel)]="cantidadMensajesArff" name="cantidadMensajesArff">
       </mat-form-field>
 
       <mat-form-field>
-        <mat-select placeholder="Seleccionar clasificador">
+        <mat-select placeholder="Seleccionar clasificador" [(ngModel)]="clasificadorSeleccionadoArff" name="clasificador">
           <mat-option *ngFor="let clasificador of clasificadores" [value]="clasificador">
             {{clasificador}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button type="button" color="primary">Clasificar mensajes</button>
+      <button mat-raised-button type="button" color="primary" (click)="clasificacionARFF()">Clasificar mensajes</button>
     </form>
+
   </mat-card-content>
 </mat-card>
 
@@ -63,21 +65,22 @@
   </mat-card-header>
 
   <mat-card-content>
+    <input type="file" (change)="onFileSelectedTakeout($event)">
     <form>
       <mat-form-field>
         <mat-label>Cantidad de mensajes</mat-label>
-        <input matInput placeholder="Ingrese cantidad de mensajes">
+        <input matInput placeholder="Ingrese cantidad de mensajes" [(ngModel)]="cantidadMensajesTakeout" name="cantidadMensajesTakeout">
       </mat-form-field>
 
       <mat-form-field>
-        <mat-select placeholder="Seleccionar clasificador">
+        <mat-select placeholder="Seleccionar clasificador"  [(ngModel)]="clasificadorSeleccionadoTakeout" name="clasificador">
           <mat-option *ngFor="let clasificador of clasificadores" [value]="clasificador">
             {{clasificador}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button type="button" color="primary">Clasificar mensajes</button>
+      <button mat-raised-button type="button" color="primary" (click)="clasificacionTakeout()">Clasificar mensajes</button>
     </form>
   </mat-card-content>
 </mat-card>
@@ -92,33 +95,33 @@
     <form>
       <mat-form-field>
         <mat-label>URI de la Base de Datos</mat-label>
-        <input matInput placeholder="Ingrese URI">
+        <input matInput placeholder="Ingrese URI" [(ngModel)]="uriBaseDatos" name="uriBaseDatos">
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Nombre de la Base de Datos</mat-label>
-        <input matInput placeholder="Ingrese nombre de la base de datos">
+        <input matInput placeholder="Ingrese nombre de la base de datos" [(ngModel)]="nombreBaseDatos" name="nombreBaseDatos"> 
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Cantidad de conversaciones</mat-label>
-        <input matInput placeholder="Ingrese cantidad de chats">
+        <input matInput placeholder="Ingrese cantidad de chats" [(ngModel)]="cantidadConversaciones" name="cantidadConversaciones">
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Cantidad de mensajes</mat-label>
-        <input matInput placeholder="Ingrese cantidad de mensajes">
+        <input matInput placeholder="Ingrese cantidad de mensajes" [(ngModel)]="cantidadMensajesLotr" name="cantidadMensajesLotr">
       </mat-form-field>
 
       <mat-form-field>
-        <mat-select placeholder="Seleccionar clasificador">
+        <mat-select placeholder="Seleccionar clasificador" [(ngModel)]="clasificadorSeleccionadoLotr" name="clasificador">
           <mat-option *ngFor="let clasificador of clasificadores" [value]="clasificador">
             {{clasificador}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button type="button" color="primary">Clasificar mensajes</button>
+      <button mat-raised-button type="button" color="primary" (click)="clasificacionLotr()">Clasificar mensajes</button>
     </form>
   </mat-card-content>
 </mat-card>

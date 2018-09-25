@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
+import { String } from 'typescript-string-operations';
 
 export interface PeopleData {
   name: string;
@@ -51,12 +52,30 @@ export class AppComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12'];
   dataSource = new MatTableDataSource<PeopleData>(SAMPLE_PEOPLE_DATA);
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
 
-  selectedFile: File = null;
+  // Parámetros Consulta Resultados
+  nombreTabla: string;
+  nombreIntegrante: string;
+
+  // Parámetros Clasificación ARFF
+  cantidadMensajesArff: number;
+  clasificadorSeleccionadoArff = 'undefined';
+  selectedFileArff: File;
+
+  // Parámetros Clasificación Takeout
+  cantidadMensajesTakeout: number;
+  clasificadorSeleccionadoTakeout = 'undefined';
+  selectedFileTakeout: File;
+
+  // Parámetros Clasificación LotR
+  uriBaseDatos: string;
+  nombreBaseDatos: string;
+  cantidadConversaciones: number;
+  cantidadMensajesLotr: number;
+  clasificadorSeleccionadoLotr = 'undefined';
 
   constructor(private http: HttpClient) { }
 
@@ -64,12 +83,50 @@ export class AppComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  onFileSelected(event) {
-    this.selectedFile = <File>event.target.files[0];
-    console.log(this.selectedFile);
+  consultaResultados() {
+    console.log(
+      String.Format('consulta de resultados con los valoress {0} y {1}', this.nombreTabla, this.nombreIntegrante)
+    );
+  }
+
+  clasificacionARFF() {
+    console.log(String.Format('clasificacion de arff con los valores {0}, {1} y {2}',
+      this.cantidadMensajesArff,
+      this.clasificadorSeleccionadoArff,
+      this.selectedFileArff.name
+    ));
+  }
+
+  clasificacionTakeout() {
+    console.log(String.Format('clasificacion de takeout con los valores {0}, {1} y {2}',
+      this.cantidadMensajesTakeout,
+      this.clasificadorSeleccionadoTakeout,
+      this.selectedFileTakeout.name
+    ));
+  }
+
+  clasificacionLotr() {
+    console.log(String.Format('clasificacion de lotr con los valores {0}, {1}, {2}, {3} y {4}',
+      this.uriBaseDatos,
+      this.nombreBaseDatos,
+      this.cantidadConversaciones,
+      this.cantidadMensajesLotr,
+      this.clasificadorSeleccionadoLotr
+    ));
+  }
+
+  onFileSelectedArff(event) {
+    this.selectedFileArff = <File>event.target.files[0];
+    console.log(this.selectedFileArff);
+  }
+
+  onFileSelectedTakeout(event) {
+    this.selectedFileTakeout = <File>event.target.files[0];
+    console.log(this.selectedFileTakeout);
   }
 
   onUpload() {
+    /*
     const fd = new FormData();
     fd.append('zipFile', this.selectedFile, this.selectedFile.name);
     fd.append('cantidad_mensajes', '10');
@@ -78,5 +135,6 @@ export class AppComponent implements OnInit {
       .subscribe(res => {
         console.log(res);
       });
+      */
   }
 }
