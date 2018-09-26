@@ -115,7 +115,7 @@ export class AppComponent implements OnInit {
         ROL_6: entry['ROL 6'], ROL_7: entry['ROL 7'], ROL_8: entry['ROL 8'], ROL_9: entry['ROL 9'],
         Dominante: entry['Dominante'], Sumiso: entry['Sumiso'],
         Amistoso: entry['Amistoso'], NoAmistoso: entry['No-Amistoso'],
-        Tarea: entry['Tarea'], SocioEmocional: entry['Socio-Emocional'],
+        Tarea: entry['Tarea'], SocioEmocional: entry['Socio-Emocional']
       };
 
       conductas.push(person);
@@ -143,6 +143,7 @@ export class AppComponent implements OnInit {
     if (this.clasificadorSeleccionadoArff === 'Red Neuronal (Enfoque 1)') {
       this.http.post(url, form).subscribe(res => {
         console.log(res);
+        this.procesarClasificacion(res);
       });
     }
   }
@@ -163,6 +164,7 @@ export class AppComponent implements OnInit {
     if (this.clasificadorSeleccionadoTakeout === 'Red Neuronal (Enfoque 1)') {
       this.http.post(url, form).subscribe(res => {
         console.log(res);
+        this.procesarClasificacion(res);
       });
     }
   }
@@ -187,9 +189,101 @@ export class AppComponent implements OnInit {
     if (this.clasificadorSeleccionadoLotr === 'Red Neuronal (Enfoque 1)') {
       this.http.get(url).subscribe(res => {
         console.log(res);
+        this.procesarClasificacion(res);
       });
     }
   }
+
+  procesarClasificacion(res) {
+    const json = JSON.parse(JSON.stringify(res));
+
+    const conductas_aux = [];
+
+    const clasificacionesSeparadas: PeopleData[] = [];
+    for (const clasificacion of json) {
+      const mapeoPersonaClasificacion = clasificacion['mapeoPersonaClasificacion'];
+      for (const integrante_json of Object.keys(mapeoPersonaClasificacion)) {
+        const conductas = mapeoPersonaClasificacion[integrante_json]['conductas'];
+        const reacciones = mapeoPersonaClasificacion[integrante_json]['reacciones'];
+        const roles = mapeoPersonaClasificacion[integrante_json]['roles'];
+        const symlog = mapeoPersonaClasificacion[integrante_json]['indicadoresSymlog'];
+
+        const person = {
+          integrante: integrante_json,
+          C1: conductas[0], C2: conductas[1], C3: conductas[2], C4: conductas[3], C5: conductas[4], C6: conductas[5], C7: conductas[6],
+          C8: conductas[7], C9: conductas[8], C10: conductas[9], C11: conductas[10], C12: conductas[11],
+          R1: reacciones[0], R2: reacciones[1], R3: reacciones[2], R4: reacciones[3],
+          ROL_1: roles[0], ROL_2: roles[1], ROL_3: roles[2], ROL_4: roles[3], ROL_5: roles[4],
+          ROL_6: roles[5], ROL_7: roles[6], ROL_8: roles[7], ROL_9: roles[8],
+          Dominante: symlog[0], Sumiso: symlog[1],
+          Amistoso: symlog[2], NoAmistoso: symlog[3],
+          Tarea: symlog[4], SocioEmocional: symlog[5]
+        };
+
+        clasificacionesSeparadas.push(person);
+
+        conductas_aux.push(conductas);
+      }
+    }
+
+    const clasificacionesAgrupadasIntermedio = {};
+
+    new Set(clasificacionesSeparadas.map(x => x['integrante'])).forEach(integrante => {
+      clasificacionesAgrupadasIntermedio[integrante] = [];
+    });
+
+    clasificacionesSeparadas.forEach(clasificacion => {
+      clasificacionesAgrupadasIntermedio[clasificacion['integrante']].push([
+        clasificacion['C1'], clasificacion['C2'], clasificacion['C3'], clasificacion['C4'], clasificacion['C5'],
+        clasificacion['C6'], clasificacion['C7'], clasificacion['C8'], clasificacion['C9'], clasificacion['C10'],
+        clasificacion['C11'], clasificacion['C12'],
+        clasificacion['R1'], clasificacion['R2'], clasificacion['R3'], clasificacion['R4'],
+        clasificacion['ROL_1'], clasificacion['ROL_2'], clasificacion['ROL_3'], clasificacion['ROL_4'], clasificacion['ROL_5'],
+        clasificacion['ROL_6'], clasificacion['ROL_7'], clasificacion['ROL_8'], clasificacion['ROL_9'],
+        clasificacion['Dominante'], clasificacion['Sumiso'], clasificacion['Amistoso'], clasificacion['NoAmistoso'], clasificacion['Tarea'],
+        clasificacion['SocioEmocional']
+      ]);
+    });
+
+    function zip(a, b) {
+      return a.map(function (e, i) {
+        return [e, b[i]];
+      });
+    }
+
+    const clasificacionesAgrupadas: PeopleData[] = [];
+    for (const integrante of Object.keys(clasificacionesAgrupadasIntermedio)) {
+      const valores = clasificacionesAgrupadasIntermedio[integrante].reduce((a, b) => zip(a, b).map(x => x[0] + x[1]));
+
+      const conductas = valores.slice(0, 12);
+      const reacciones = valores.slice(12, 16);
+      const roles = valores.slice(16, 25);
+      const symlog = valores.slice(25, 31);
+
+      const person = {
+        integrante: integrante,
+        C1: conductas[0], C2: conductas[1], C3: conductas[2], C4: conductas[3], C5: conductas[4], C6: conductas[5], C7: conductas[6],
+        C8: conductas[7], C9: conductas[8], C10: conductas[9], C11: conductas[10], C12: conductas[11],
+        R1: reacciones[0], R2: reacciones[1], R3: reacciones[2], R4: reacciones[3],
+        ROL_1: roles[0], ROL_2: roles[1], ROL_3: roles[2], ROL_4: roles[3], ROL_5: roles[4],
+        ROL_6: roles[5], ROL_7: roles[6], ROL_8: roles[7], ROL_9: roles[8],
+        Dominante: symlog[0], Sumiso: symlog[1],
+        Amistoso: symlog[2], NoAmistoso: symlog[3],
+        Tarea: symlog[4], SocioEmocional: symlog[5]
+      };
+
+      clasificacionesAgrupadas.push(person);
+    }
+
+    console.log(clasificacionesSeparadas);
+    console.log(clasificacionesAgrupadasIntermedio);
+    console.log(clasificacionesAgrupadas);
+
+    this.dataSource = new MatTableDataSource<PeopleData>(clasificacionesAgrupadas);
+    this.dataSource.paginator = this.paginator;
+  }
+
+  agruparClasificacionesSeparadas(clasificacionesSeparadas, conductas_aux) { }
 
   onFileSelectedArff(event) {
     this.selectedFileArff = <File>event.target.files[0];
@@ -199,18 +293,5 @@ export class AppComponent implements OnInit {
   onFileSelectedTakeout(event) {
     this.selectedFileTakeout = <File>event.target.files[0];
     console.log(this.selectedFileTakeout);
-  }
-
-  onUpload() {
-    /*
-    const fd = new FormData();
-    fd.append('zipFile', this.selectedFile, this.selectedFile.name);
-    fd.append('cantidad_mensajes', '10');
-
-    this.http.post('http://localhost:8080/neuralnetwork/clasificar_arff', fd)
-      .subscribe(res => {
-        console.log(res);
-      });
-      */
   }
 }
