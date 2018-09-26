@@ -78,6 +78,9 @@ export class AppComponent implements OnInit {
   cantidadMensajesLotr: number;
   clasificadorSeleccionadoLotr = 'undefined';
 
+  // Parámetros guardar tabla en la base
+  nombreTablaGuardar: string;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
@@ -109,12 +112,54 @@ export class AppComponent implements OnInit {
     });
   }
 
+  guardarResultados() {
+    console.log('guardarResultados()');
+
+    if (this.nombreTablaGuardar === 'undefined' || this.nombreTablaGuardar === '') {
+      return;
+    }
+
+    const url = String.Format('http://localhost:8080/results/{0}', this.nombreTablaGuardar);
+
+    console.log(url);
+    console.log(this.dataSource.data);
+
+    const lineasCsv = [];
+    lineasCsv.push('integrante,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,R1,R2,R3,R4,' +
+    'ROL 1,ROL 2,ROL 3,ROL 4,ROL 5,ROL 6,ROL 7,ROL 8,ROL 9,Dominante,Sumiso,Amistoso,No-Amistoso,Tarea,Socio-Emocional');
+    for (const clasificacion of this.dataSource.data) {
+      lineasCsv.push(
+        clasificacion['integrante'] + ',' + clasificacion['C1'] + ',' + clasificacion['C2'] + ',' + clasificacion['C3'] + ',' +
+        clasificacion['C4'] + ',' + clasificacion['C5'] + ',' + clasificacion['C6'] + ',' + clasificacion['C7'] + ',' +
+        clasificacion['C8'] + ',' + clasificacion['C9'] + ',' + clasificacion['C10'] + ',' + clasificacion['C11'] + ',' +
+        clasificacion['C12'] + ',' +
+        clasificacion['R1'] + ',' + clasificacion['R2'] + ',' + clasificacion['R3'] + ',' + clasificacion['R4'] + ',' +
+        clasificacion['ROL_1'] + ',' + clasificacion['ROL_2'] + ',' + clasificacion['ROL_3'] + ',' + clasificacion['ROL_4'] + ',' +
+        clasificacion['ROL_5'] + ',' + clasificacion['ROL_6'] + ',' + clasificacion['ROL_7'] + ',' + clasificacion['ROL_8'] + ',' +
+        clasificacion['ROL_9'] + ',' +
+        clasificacion['Dominante'] + ',' + clasificacion['Sumiso'] + ',' + clasificacion['Amistoso'] + ',' +
+        clasificacion['NoAmistoso'] + ',' + clasificacion['Tarea'] + ',' + clasificacion['SocioEmocional'] + '\n'
+      );
+    }
+
+    console.log(lineasCsv);
+
+    const csvFile = new File(lineasCsv, 'temp.csv', { type: 'text/plain' });
+
+    const form = new FormData();
+    form.append('csvFile', csvFile);
+
+    this.http.post(url, form).subscribe(res => {
+      console.log(res);
+    });
+  }
+
   parseResponse(res) {
     const json = JSON.parse(JSON.stringify(res));
 
     console.log(json[0]);
 
-    const conductas: PeopleData[] = [];
+    const valores: PeopleData[] = [];
     for (const entry of json) {
       const person = {
         integrante: entry['integrante'],
@@ -128,12 +173,12 @@ export class AppComponent implements OnInit {
         Tarea: entry['Tarea'], SocioEmocional: entry['Socio-Emocional']
       };
 
-      conductas.push(person);
+      valores.push(person);
     }
 
-    console.log(conductas[0]);
+    console.log(valores[0]);
 
-    this.dataSource = new MatTableDataSource<PeopleData>(conductas);
+    this.dataSource = new MatTableDataSource<PeopleData>(valores);
     this.dataSource.paginator = this.paginator;
   }
 
