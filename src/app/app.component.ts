@@ -50,6 +50,7 @@ export class AppComponent implements OnInit {
   displayedColumnsReacciones: string[] = ['integrante', 'R1', 'R2', 'R3', 'R4'];
   displayedColumnsRoles: string[] = ['integrante', 'ROL_1', 'ROL_2', 'ROL_3', 'ROL_4', 'ROL_5', 'ROL_6', 'ROL_7', 'ROL_8', 'ROL_9'];
   displayedColumnsSymlog: string[] = ['integrante', 'Dominante', 'Sumiso', 'Amistoso', 'NoAmistoso', 'Tarea', 'SocioEmocional'];
+
   dataSource: MatTableDataSource<PeopleData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 

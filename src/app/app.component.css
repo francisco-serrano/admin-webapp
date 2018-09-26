@@ -2,12 +2,32 @@
     padding: 0 14px;   
 }
 
-.table-container {
+.table-card-container {
     margin: 1%;
 }
 
 .input-file-button {
     margin-bottom: 1%;
+}
+
+.header-nombre {
+    width: 20%;
+}
+
+.header-conducta {
+    width: 5%;
+}
+
+.header-reaccion {
+    width: 15%;
+}
+
+.header-rol {
+    width: 8%;
+}
+
+.header-symlog {
+    width: 10%;
 }
 
 table {
