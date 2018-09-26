@@ -55,6 +55,7 @@ export class AppComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
+  tablas: string[];
 
   // Parámetros Consulta Resultados
   nombreTabla: string;
@@ -80,7 +81,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    // this.dataSource.paginator = this.paginator;
+    this.actualizarNombresTabla();
   }
 
   consultaResultados() {
@@ -97,6 +98,14 @@ export class AppComponent implements OnInit {
 
     this.http.get(url).subscribe(res => {
       this.parseResponse(res);
+    });
+  }
+
+  actualizarNombresTabla() {
+    const url = 'http://localhost:8080/results/tables';
+
+    this.http.get(url).subscribe(res => {
+      this.tablas = Array.from(JSON.parse(JSON.stringify(res)));
     });
   }
 

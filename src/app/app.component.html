@@ -108,9 +108,14 @@
 
   <mat-card-content>
     <form>
-      <mat-form-field>
+      <mat-form-field style="width: 20%">
         <mat-label>Nombre de tabla</mat-label>
-        <input matInput placeholder="Ingresar nombre de tabla" [(ngModel)]="nombreTabla" name="nombreTabla">
+        <!--<input matInput placeholder="Ingresar nombre de tabla" [(ngModel)]="nombreTabla" name="nombreTabla">-->
+        <mat-select placeholder="Seleccionar tabla" [(ngModel)]="nombreTabla" name="tabla">
+          <mat-option *ngFor="let tabla of tablas" [value]="tabla">
+            {{tabla}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -119,6 +124,7 @@
       </mat-form-field>
 
       <button mat-raised-button type="button" color="primary" (click)="consultaResultados()">Consultar Base de Datos</button>
+      <button mat-raised-button type="button" color="primary" (click)="actualizarNombresTabla()" style="margin-left: 1%">Actualizar tablas</button>
     </form>
   </mat-card-content>
 </mat-card>
