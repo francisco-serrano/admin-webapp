@@ -6,6 +6,16 @@
 
 <mat-card class="card">
   <mat-card-header>
+    <mat-card-title>Grafico de Evolución</mat-card-title>
+    <mat-card-subtitle>Aguante la droga</mat-card-subtitle>
+  </mat-card-header>
+  <div [hidden]="!chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+  </div>
+</mat-card>
+
+<mat-card class="card">
+  <mat-card-header>
     <mat-card-title>Clasificación de archivos ARFF</mat-card-title>
     <mat-card-subtitle>Dentro del ZIP, además de los ARFF, incluir id-timestamp.csv</mat-card-subtitle>
   </mat-card-header>

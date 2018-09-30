@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { String } from 'typescript-string-operations';
+import { Chart } from 'chart.js';
+import { Options } from '../../node_modules/@types/selenium-webdriver/firefox';
 
 export interface PeopleData {
   integrante: string;
@@ -81,10 +83,14 @@ export class AppComponent implements OnInit {
   // Parámetros guardar tabla en la base
   nombreTablaGuardar: string;
 
+  // Información del chart
+  chart = [];
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.actualizarNombresTabla();
+    this.mostrarGrafico();
   }
 
   consultaResultados() {
@@ -112,6 +118,48 @@ export class AppComponent implements OnInit {
     });
   }
 
+  mostrarGrafico() {
+    const weatherDates = [1, 2, 3];
+    const temp_max = [15, 20, 25];
+    const temp_min = [5, 10, 15];
+
+    let fecha = new Date(2018, 12, 20);
+
+    console.log(fecha.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
+
+    this.chart = new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: weatherDates,
+        datasets: [
+          {
+            data: temp_max,
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            data: temp_min,
+            borderColor: '#ffcc00',
+            fill: false
+          },
+        ]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+            display: true
+          }],
+        }
+      }
+    });
+  }
+
   guardarResultados() {
     console.log('guardarResultados()');
 
@@ -126,7 +174,7 @@ export class AppComponent implements OnInit {
 
     const lineasCsv = [];
     lineasCsv.push('integrante,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,R1,R2,R3,R4,' +
-    'ROL 1,ROL 2,ROL 3,ROL 4,ROL 5,ROL 6,ROL 7,ROL 8,ROL 9,Dominante,Sumiso,Amistoso,No-Amistoso,Tarea,Socio-Emocional');
+      'ROL 1,ROL 2,ROL 3,ROL 4,ROL 5,ROL 6,ROL 7,ROL 8,ROL 9,Dominante,Sumiso,Amistoso,No-Amistoso,Tarea,Socio-Emocional');
     for (const clasificacion of this.dataSource.data) {
       lineasCsv.push(
         clasificacion['integrante'] + ',' + clasificacion['C1'] + ',' + clasificacion['C2'] + ',' + clasificacion['C3'] + ',' +
