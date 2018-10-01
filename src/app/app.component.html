@@ -6,12 +6,48 @@
 
 <mat-card class="card">
   <mat-card-header>
-    <mat-card-title>Grafico de Evolución</mat-card-title>
-    <mat-card-subtitle>Aguante la droga</mat-card-subtitle>
+    <mat-card-title>Grafico de Evolución de Usuarios</mat-card-title>
+    <mat-card-subtitle>Cambio de las dimensiones a lo largo de las sesiones</mat-card-subtitle>
   </mat-card-header>
-  <div [hidden]="!chart">
-    <canvas id="canvas">{{ chart }}</canvas>
-  </div>
+  <mat-card-content>
+    <form>
+      <mat-form-field>
+        <mat-label>Integrante</mat-label>
+        <mat-select placeholder="Seleccionar integrante" [(ngModel)]="integranteSeleccionado" name="integrante">
+          <mat-option *ngFor="let integrante of listadoIntegrantes" [value]="integrante">
+            {{integrante}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Nivel Mostrar</mat-label>
+        <mat-select placeholder="Seleccionar Nivel" [(ngModel)]="nivelSeleccionado" name="nivel">
+          <mat-option *ngFor="let nivel of listadoNiveles" [value]="nivel">
+            {{nivel}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button type="button" color="primary" (click)="onIntegranteSeleccionado()">Cargar Datos</button>
+    </form>
+
+    <div [hidden]="!mostrarChartConductas">
+      <canvas id="conductas">{{ chartConductas }}</canvas>
+    </div>
+
+    <div [hidden]="!mostrarChartReacciones">
+      <canvas id="reacciones">{{ chartReacciones }}</canvas>
+    </div>
+
+    <div [hidden]="!mostrarChartRoles">
+      <canvas id="roles">{{ chartRoles }}</canvas>
+    </div>
+
+    <div [hidden]="!mostrarChartSymlog">
+      <canvas id="symlog">{{ chartSymlog }}</canvas>
+    </div>
+  </mat-card-content>
 </mat-card>
 
 <mat-card class="card">

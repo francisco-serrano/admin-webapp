@@ -3,7 +3,6 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { String } from 'typescript-string-operations';
 import { Chart } from 'chart.js';
-import { Options } from '../../node_modules/@types/selenium-webdriver/firefox';
 
 export interface PeopleData {
   integrante: string;
@@ -55,7 +54,7 @@ export class AppComponent implements OnInit {
 
   dataSource: MatTableDataSource<PeopleData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  jsonClasificacion;
   clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
   tablas: string[];
 
@@ -74,23 +73,43 @@ export class AppComponent implements OnInit {
   selectedFileTakeout: File;
 
   // Parámetros Clasificación LotR
-  uriBaseDatos: string;
+  /* uriBaseDatos: string;
   nombreBaseDatos: string;
   cantidadConversaciones: number;
   cantidadMensajesLotr: number;
-  clasificadorSeleccionadoLotr = 'undefined';
+  clasificadorSeleccionadoLotr = 'undefined'; */
+  uriBaseDatos = 'mongodb://localhost:27017';
+  nombreBaseDatos = 'local';
+  cantidadConversaciones = 10;
+  cantidadMensajesLotr = -1;
+  clasificadorSeleccionadoLotr = this.clasificadores[1];
 
   // Parámetros guardar tabla en la base
   nombreTablaGuardar: string;
 
   // Información del chart
-  chart = [];
+  listadoIntegrantes = [];
+  integranteSeleccionado: string;
+  listadoNiveles = ['conductas', 'reacciones', 'roles', 'indicadoresSymlog'];
+  nivelSeleccionado: string;
+
+  chartConductas: Chart;
+  mostrarChartConductas = false;
+
+  chartReacciones: Chart;
+  mostrarChartReacciones = false;
+
+  chartRoles: Chart;
+  mostrarChartRoles = false;
+
+  chartSymlog: Chart;
+  mostrarChartSymlog = false;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.actualizarNombresTabla();
-    this.mostrarGrafico();
+    this.crearGraficos();
   }
 
   consultaResultados() {
@@ -118,43 +137,261 @@ export class AppComponent implements OnInit {
     });
   }
 
-  mostrarGrafico() {
-    const weatherDates = [1, 2, 3];
-    const temp_max = [15, 20, 25];
-    const temp_min = [5, 10, 15];
-
-    let fecha = new Date(2018, 12, 20);
-
-    console.log(fecha.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
-
-    this.chart = new Chart('canvas', {
+  crearGraficos() {
+    this.chartConductas = new Chart('conductas', {
       type: 'line',
       data: {
-        labels: weatherDates,
+        labels: [],
         datasets: [
           {
-            data: temp_max,
+            label: 'C1',
+            data: [],
             borderColor: '#3cba9f',
             fill: false
           },
           {
-            data: temp_min,
+            label: 'C2',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'C3',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'C4',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'C5',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'C6',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'C7',
+            data: [],
             borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'C8',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'C9',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'C10',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+          {
+            label: 'C11',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+          {
+            label: 'C12',
+            data: [],
+            borderColor: '#ff0000',
             fill: false
           },
         ]
       },
       options: {
         legend: {
-          display: false
+          display: true
         },
         scales: {
-          xAxes: [{
-            display: true
-          }],
-          yAxes: [{
-            display: true
-          }],
+          xAxes: [{ display: true }],
+          yAxes: [{ display: true }],
+        }
+      }
+    });
+
+    this.chartReacciones = new Chart('reacciones', {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Positiva',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'Responde',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'Pregunta',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'Negativa',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{ display: true }],
+          yAxes: [{ display: true }],
+        }
+      }
+    });
+
+    this.chartRoles = new Chart('roles', {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'R1: Cerebro',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'R2: Colaborador',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'R3: Coordinador',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'R4: Especialista',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+          {
+            label: 'R5: Finalizador',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'R6: Implementador',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'R7: Impulsor',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'R8: Investigador',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+          {
+            label: 'R9: Monitor',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{ display: true }],
+          yAxes: [{ display: true }],
+        }
+      }
+    });
+
+    this.chartSymlog = new Chart('symlog', {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Dominante',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'Sumiso',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'Amistoso',
+            data: [],
+            borderColor: '#ffcc00',
+            fill: false
+          },
+          {
+            label: 'No Amistoso',
+            data: [],
+            borderColor: '#ff0000',
+            fill: false
+          },
+          {
+            label: 'Tarea',
+            data: [],
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'Socio-Emocional',
+            data: [],
+            borderColor: '#0033cc',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{ display: true }],
+          yAxes: [{ display: true }],
         }
       }
     });
@@ -205,8 +442,6 @@ export class AppComponent implements OnInit {
   parseResponse(res) {
     const json = JSON.parse(JSON.stringify(res));
 
-    console.log(json[0]);
-
     const valores: PeopleData[] = [];
     for (const entry of json) {
       const person = {
@@ -245,7 +480,6 @@ export class AppComponent implements OnInit {
 
     if (this.clasificadorSeleccionadoArff === 'Red Neuronal (Enfoque 1)') {
       this.http.post(url, form).subscribe(res => {
-        console.log(res);
         this.procesarClasificacion(res);
       });
     }
@@ -298,12 +532,15 @@ export class AppComponent implements OnInit {
   }
 
   procesarClasificacion(res) {
-    const json = JSON.parse(JSON.stringify(res));
+    this.jsonClasificacion = JSON.parse(JSON.stringify(res));
+
+    console.log('procesarClasificacion');
+    console.log(this.jsonClasificacion);
 
     const conductas_aux = [];
 
     const clasificacionesSeparadas: PeopleData[] = [];
-    for (const clasificacion of json) {
+    for (const clasificacion of this.jsonClasificacion) {
       const mapeoPersonaClasificacion = clasificacion['mapeoPersonaClasificacion'];
       for (const integrante_json of Object.keys(mapeoPersonaClasificacion)) {
         const conductas = mapeoPersonaClasificacion[integrante_json]['conductas'];
@@ -348,15 +585,9 @@ export class AppComponent implements OnInit {
       ]);
     });
 
-    function zip(a, b) {
-      return a.map(function (e, i) {
-        return [e, b[i]];
-      });
-    }
-
     const clasificacionesAgrupadas: PeopleData[] = [];
     for (const integrante of Object.keys(clasificacionesAgrupadasIntermedio)) {
-      const valores = clasificacionesAgrupadasIntermedio[integrante].reduce((a, b) => zip(a, b).map(x => x[0] + x[1]));
+      const valores = clasificacionesAgrupadasIntermedio[integrante].reduce((a, b) => this.zip(a, b).map(x => x[0] + x[1]));
 
       const conductas = valores.slice(0, 12);
       const reacciones = valores.slice(12, 16);
@@ -378,9 +609,9 @@ export class AppComponent implements OnInit {
       clasificacionesAgrupadas.push(person);
     }
 
-    console.log(clasificacionesSeparadas);
-    console.log(clasificacionesAgrupadasIntermedio);
-    console.log(clasificacionesAgrupadas);
+    this.listadoIntegrantes = Array.from(
+      new Set(this.jsonClasificacion.map(conv => conv['integrantes']).flat())
+    );
 
     this.dataSource = new MatTableDataSource<PeopleData>(clasificacionesAgrupadas);
     this.dataSource.paginator = this.paginator;
@@ -396,5 +627,84 @@ export class AppComponent implements OnInit {
   onFileSelectedTakeout(event) {
     this.selectedFileTakeout = <File>event.target.files[0];
     console.log(this.selectedFileTakeout);
+  }
+
+  onIntegranteSeleccionado() {
+    console.log('Integrante Seleccionado: ' + this.integranteSeleccionado);
+
+    const timestamps = this.jsonClasificacion
+      .filter(conv => conv['integrantes'].includes(this.integranteSeleccionado))
+      .map(conv => conv['timestamp'])
+      .map(timestamp => new Date(timestamp).toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
+
+    const valoresPorPersona = this.jsonClasificacion
+      .filter(conv => conv['integrantes'].includes(this.integranteSeleccionado))
+      .map(conv => conv['mapeoPersonaClasificacion'][this.integranteSeleccionado][this.nivelSeleccionado]);
+
+    const valoresPorDimension = [];
+    for (let i = 0; i < valoresPorPersona[0].length; i++) {
+      valoresPorDimension.push(valoresPorPersona.map(x => x[i]));
+    }
+
+    let chartUtilizar: Chart;
+
+    this.mostrarChartConductas = false;
+    this.mostrarChartReacciones = false;
+    this.mostrarChartRoles = false;
+    this.mostrarChartSymlog = false;
+
+    if (this.nivelSeleccionado === 'conductas') {
+      chartUtilizar = this.chartConductas;
+    }
+
+    if (this.nivelSeleccionado === 'reacciones') {
+      chartUtilizar = this.chartReacciones;
+    }
+
+    if (this.nivelSeleccionado === 'roles') {
+      chartUtilizar = this.chartRoles;
+    }
+
+    if (this.nivelSeleccionado === 'indicadoresSymlog') {
+      chartUtilizar = this.chartSymlog;
+    }
+
+    const cantidadDimensiones = chartUtilizar['data'].datasets.length;
+
+    chartUtilizar['data'].labels = timestamps;
+    /* for (let i = 0; i < cantidadDimensiones; i++) {
+      chartUtilizar['data'].datasets[i].data = valoresPorDimension[i];
+    } */
+    this.zip(chartUtilizar['data'].datasets, valoresPorDimension)
+      .map(par => par[0].data = par[1]);
+    chartUtilizar.update();
+
+    console.log(this.nivelSeleccionado);
+    console.log(timestamps);
+    console.log(valoresPorPersona);
+    console.log(valoresPorDimension);
+    console.log(chartUtilizar);
+
+    if (this.nivelSeleccionado === 'conductas') {
+      this.mostrarChartConductas = true;
+    }
+
+    if (this.nivelSeleccionado === 'reacciones') {
+      this.mostrarChartReacciones = true;
+    }
+
+    if (this.nivelSeleccionado === 'roles') {
+      this.mostrarChartRoles = true;
+    }
+
+    if (this.nivelSeleccionado === 'indicadoresSymlog') {
+      this.mostrarChartSymlog = true;
+    }
+  }
+
+  zip(a, b) {
+    return a.map(function (e, i) {
+      return [e, b[i]];
+    });
   }
 }
