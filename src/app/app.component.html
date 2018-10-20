@@ -52,6 +52,34 @@
 
 <mat-card class="card">
   <mat-card-header>
+    <mat-card-title>Clasificación de archivos CSV</mat-card-title>
+    <mat-card-subtitle>Adjuntar un ZIP con los archivos correspondientes</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <input type="file" (change)="onFileSelectedCsv($event)" class="input-file-button">
+    <form>
+      <mat-form-field>
+        <mat-label>Cantidad de mensajes</mat-label>
+        <input matInput placeholder="Ingrese cantidad de mensajes" [(ngModel)]="cantidadMensajesCsv" name="cantidadMensajesCsv">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Seleccionar clasificador" [(ngModel)]="clasificadorSeleccionadoCsv" name="clasificador">
+          <mat-option *ngFor="let clasificador of clasificadores" [value]="clasificador">
+            {{clasificador}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button type="button" color="primary" (click)="clasificacionCSV()">Clasificar mensajes</button>
+    </form>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card">
+  <mat-card-header>
     <mat-card-title>Clasificación de archivos ARFF</mat-card-title>
     <mat-card-subtitle>Dentro del ZIP, además de los ARFF, incluir id-timestamp.csv</mat-card-subtitle>
   </mat-card-header>

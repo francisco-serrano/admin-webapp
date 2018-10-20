@@ -55,12 +55,23 @@ export class AppComponent implements OnInit {
   dataSource: MatTableDataSource<PeopleData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   jsonClasificacion;
-  clasificadores: string[] = ['Clasificador básico (SMO)', 'Red Neuronal (Enfoque 1)'];
+  clasificadores: string[] = [
+    'Clasificador básico (SMO)',
+    'Red Plana (Enfoque 1)',
+    'CNN (Enfoque 2)',
+    'RNN (Enfoque 3)',
+    'CRNN (Enfoque 4)'
+  ];
   tablas: string[];
 
   // Parámetros Consulta Resultados
   nombreTabla: string;
   nombreIntegrante: string;
+
+  // Parámetros Clasificación CSV
+  cantidadMensajesCsv: number;
+  clasificadorSeleccionadoCsv = 'undefined';
+  selectedFileCsv: File;
 
   // Parámetros Clasificación ARFF
   cantidadMensajesArff: number;
@@ -465,6 +476,41 @@ export class AppComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  clasificacionCSV() {
+    console.log(String.Format('clasificacion de csv con los valores {0}, {1}, {2}',
+      this.cantidadMensajesCsv,
+      this.clasificadorSeleccionadoCsv,
+      this.selectedFileCsv.name
+    ));
+
+    const form = new FormData();
+    form.append('zipFile', this.selectedFileCsv);
+    form.append('cantidad_mensajes', this.cantidadMensajesCsv.toString());
+
+    let url = 'http://localhost:8080/neuralnetwork/clasificar_csv/';
+
+    switch (this.clasificadorSeleccionadoCsv) {
+      case 'Red Plana (Enfoque 1)':
+        url += 'plain';
+        break;
+      case 'CNN (Enfoque 2)':
+        url += 'cnn';
+        break;
+      case 'RNN (Enfoque 3)':
+        url += 'rnn';
+        break;
+      case 'CRNN (Enfoque 4)':
+        url += 'crnn';
+        break;
+    }
+
+    console.log('URL: ' + url);
+
+    this.http.post(url, form).subscribe(res => {
+      this.procesarClasificacion(res);
+    });
+  }
+
   clasificacionARFF() {
     console.log(String.Format('clasificacion de arff con los valores {0}, {1} y {2}',
       this.cantidadMensajesArff,
@@ -476,13 +522,26 @@ export class AppComponent implements OnInit {
     form.append('zipFile', this.selectedFileArff);
     form.append('cantidad_mensajes', this.cantidadMensajesArff.toString());
 
-    const url = 'http://localhost:8080/neuralnetwork/clasificar_arff';
+    let url = 'http://localhost:8080/neuralnetwork/clasificar_arff/';
 
-    if (this.clasificadorSeleccionadoArff === 'Red Neuronal (Enfoque 1)') {
-      this.http.post(url, form).subscribe(res => {
-        this.procesarClasificacion(res);
-      });
+    switch (this.clasificadorSeleccionadoCsv) {
+      case 'Red Plana (Enfoque 1)':
+        url += 'plain';
+        break;
+      case 'CNN (Enfoque 2)':
+        url += 'cnn';
+        break;
+      case 'RNN (Enfoque 3)':
+        url += 'rnn';
+        break;
+      case 'CRNN (Enfoque 4)':
+        url += 'crnn';
+        break;
     }
+
+    this.http.post(url, form).subscribe(res => {
+      this.procesarClasificacion(res);
+    });
   }
 
   clasificacionTakeout() {
@@ -496,14 +555,26 @@ export class AppComponent implements OnInit {
     form.append('zipFile', this.selectedFileTakeout);
     form.append('cantidad_mensajes', this.cantidadMensajesTakeout.toString());
 
-    const url = 'http://localhost:8080/neuralnetwork/clasificar_takeout';
+    let url = 'http://localhost:8080/neuralnetwork/clasificar_takeout/';
 
-    if (this.clasificadorSeleccionadoTakeout === 'Red Neuronal (Enfoque 1)') {
-      this.http.post(url, form).subscribe(res => {
-        console.log(res);
-        this.procesarClasificacion(res);
-      });
+    switch (this.clasificadorSeleccionadoCsv) {
+      case 'Red Plana (Enfoque 1)':
+        url += 'plain';
+        break;
+      case 'CNN (Enfoque 2)':
+        url += 'cnn';
+        break;
+      case 'RNN (Enfoque 3)':
+        url += 'rnn';
+        break;
+      case 'CRNN (Enfoque 4)':
+        url += 'crnn';
+        break;
     }
+
+    this.http.post(url, form).subscribe(res => {
+      this.procesarClasificacion(res);
+    });
   }
 
   clasificacionLotr() {
@@ -515,20 +586,35 @@ export class AppComponent implements OnInit {
       this.clasificadorSeleccionadoLotr
     ));
 
-    const url = String.Format(
-      'http://localhost:8080/neuralnetwork/clasificar_lotr?db_uri={0}&db_name={1}&cantidad_chats={2}&cantidad_mensajes={3}',
+    let url = 'http://localhost:8080/neuralnetwork/clasificar_lotr/';
+
+    switch (this.clasificadorSeleccionadoCsv) {
+      case 'Red Plana (Enfoque 1)':
+        url += 'plain';
+        break;
+      case 'CNN (Enfoque 2)':
+        url += 'cnn';
+        break;
+      case 'RNN (Enfoque 3)':
+        url += 'rnn';
+        break;
+      case 'CRNN (Enfoque 4)':
+        url += 'crnn';
+        break;
+    }
+
+    url += String.Format(
+      '/?db_uri={0}&db_name={1}&cantidad_chats={2}&cantidad_mensajes={3}',
       this.uriBaseDatos,
       this.nombreBaseDatos,
       this.cantidadConversaciones,
       this.cantidadMensajesLotr
     );
 
-    if (this.clasificadorSeleccionadoLotr === 'Red Neuronal (Enfoque 1)') {
-      this.http.get(url).subscribe(res => {
-        console.log(res);
-        this.procesarClasificacion(res);
-      });
-    }
+    this.http.get(url).subscribe(res => {
+      console.log(res);
+      this.procesarClasificacion(res);
+    });
   }
 
   procesarClasificacion(res) {
@@ -545,7 +631,7 @@ export class AppComponent implements OnInit {
       for (const integrante_json of Object.keys(mapeoPersonaClasificacion)) {
         const conductas = mapeoPersonaClasificacion[integrante_json]['conductas'];
         const reacciones = mapeoPersonaClasificacion[integrante_json]['reacciones'];
-        const roles = mapeoPersonaClasificacion[integrante_json]['roles'];
+        const roles = mapeoPersonaClasificacion[integrante_json]['roles'].map(x => Math.round(x));
         const symlog = mapeoPersonaClasificacion[integrante_json]['indicadoresSymlog'];
 
         const person = {
@@ -591,7 +677,7 @@ export class AppComponent implements OnInit {
 
       const conductas = valores.slice(0, 12);
       const reacciones = valores.slice(12, 16);
-      const roles = valores.slice(16, 25);
+      const roles = valores.slice(16, 25).map(x => Math.round(x));
       const symlog = valores.slice(25, 31);
 
       const person = {
@@ -618,6 +704,11 @@ export class AppComponent implements OnInit {
   }
 
   agruparClasificacionesSeparadas(clasificacionesSeparadas, conductas_aux) { }
+
+  onFileSelectedCsv(event) {
+    this.selectedFileCsv = <File>event.target.files[0];
+    console.log(this.selectedFileCsv);
+  }
 
   onFileSelectedArff(event) {
     this.selectedFileArff = <File>event.target.files[0];
