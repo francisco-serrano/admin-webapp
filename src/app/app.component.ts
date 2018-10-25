@@ -74,6 +74,8 @@ export class AppComponent implements OnInit {
   ];
   tablas: string[];
 
+  indicadoresGrafico: string;
+
   // Parámetros Consulta Resultados
   nombreTabla: string;
   nombreIntegrante: string;
@@ -807,7 +809,7 @@ export class AppComponent implements OnInit {
       chartUtilizar = this.chartSymlog;
     }
 
-    const cantidadDimensiones = chartUtilizar['data'].datasets.length;
+    // const cantidadDimensiones = chartUtilizar['data'].datasets.length;
 
     chartUtilizar['data'].labels = timestamps;
     this.zip(chartUtilizar['data'].datasets, valoresPorDimension)
@@ -836,6 +838,8 @@ export class AppComponent implements OnInit {
     if (this.nivelSeleccionado === 'indicadoresSymlog') {
       this.mostrarChartSymlog = true;
     }
+
+    this.indicadoresGrafico = chartUtilizar['data'].datasets.map(dataset => dataset['label'] + ' -> ' + dataset['data']).reduce((a, b) => a + '; ' + b);
   }
 
   zip(a, b) {
