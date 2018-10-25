@@ -37,6 +37,9 @@ export interface PeopleData {
   NoAmistoso: number;
   Tarea: number;
   SocioEmocional: number;
+  U_D: number;
+  P_N: number;
+  F_B: number;
 }
 
 @Component({
@@ -358,10 +361,10 @@ export class AppComponent implements OnInit {
       data: {
         labels: [],
         datasets: [
-          {
+          /*{
             label: 'Dominante',
             data: [],
-            borderColor: '#3cba9f',
+            borderColor: '#0033cc',
             fill: false
           },
           {
@@ -373,25 +376,43 @@ export class AppComponent implements OnInit {
           {
             label: 'Amistoso',
             data: [],
-            borderColor: '#ffcc00',
+            borderColor: '#ff6600',
             fill: false
           },
           {
             label: 'No Amistoso',
             data: [],
-            borderColor: '#ff0000',
+            borderColor: '#ff6600',
             fill: false
           },
           {
             label: 'Tarea',
             data: [],
-            borderColor: '#3cba9f',
+            borderColor: '#00ff99',
             fill: false
           },
           {
             label: 'Socio-Emocional',
             data: [],
+            borderColor: '#00ff99',
+            fill: false
+          },*/
+          {
+            label: 'Up/Down',
+            data: [],
             borderColor: '#0033cc',
+            fill: false
+          },
+          {
+            label: 'Positive/Negative',
+            data: [],
+            borderColor: '#ff6600',
+            fill: false
+          },
+          {
+            label: 'Forward/Backward',
+            data: [],
+            borderColor: '#00ff99',
             fill: false
           }
         ]
@@ -422,7 +443,7 @@ export class AppComponent implements OnInit {
 
     const lineasCsv = [];
     lineasCsv.push('integrante,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,R1,R2,R3,R4,' +
-      'ROL 1,ROL 2,ROL 3,ROL 4,ROL 5,ROL 6,ROL 7,ROL 8,ROL 9,Dominante,Sumiso,Amistoso,No-Amistoso,Tarea,Socio-Emocional');
+      'ROL 1,ROL 2,ROL 3,ROL 4,ROL 5,ROL 6,ROL 7,ROL 8,ROL 9,Dominante,Sumiso,Amistoso,No-Amistoso,Tarea,Socio-Emocional\n');
     for (const clasificacion of this.dataSource.data) {
       lineasCsv.push(
         clasificacion['integrante'] + ',' + clasificacion['C1'] + ',' + clasificacion['C2'] + ',' + clasificacion['C3'] + ',' +
@@ -453,6 +474,7 @@ export class AppComponent implements OnInit {
   parseResponse(res) {
     const json = JSON.parse(JSON.stringify(res));
 
+    // this.listadoIntegrantes = [];
     const valores: PeopleData[] = [];
     for (const entry of json) {
       const person = {
@@ -468,6 +490,7 @@ export class AppComponent implements OnInit {
       };
 
       valores.push(person);
+      // this.listadoIntegrantes.push(person.integrante);
     }
 
     console.log(valores[0]);
@@ -643,7 +666,10 @@ export class AppComponent implements OnInit {
           ROL_6: roles[5], ROL_7: roles[6], ROL_8: roles[7], ROL_9: roles[8],
           Dominante: symlog[0], Sumiso: symlog[1],
           Amistoso: symlog[2], NoAmistoso: symlog[3],
-          Tarea: symlog[4], SocioEmocional: symlog[5]
+          Tarea: symlog[4], SocioEmocional: symlog[5],
+          U_D: symlog[0] + symlog[1],
+          P_N: symlog[2] + symlog[3],
+          F_B: symlog[4] + symlog[5]
         };
 
         clasificacionesSeparadas.push(person);
@@ -699,11 +725,21 @@ export class AppComponent implements OnInit {
       new Set(this.jsonClasificacion.map(conv => conv['integrantes']).flat())
     );
 
+    this.listadoIntegrantes = this.listadoIntegrantes.sort((x, y) => {
+      if (x > y) {
+        return 1;
+      }
+
+      if (x < y) {
+        return -1;
+      }
+
+      return 0;
+    });
+
     this.dataSource = new MatTableDataSource<PeopleData>(clasificacionesAgrupadas);
     this.dataSource.paginator = this.paginator;
   }
-
-  agruparClasificacionesSeparadas(clasificacionesSeparadas, conductas_aux) { }
 
   onFileSelectedCsv(event) {
     this.selectedFileCsv = <File>event.target.files[0];
@@ -763,11 +799,9 @@ export class AppComponent implements OnInit {
     const cantidadDimensiones = chartUtilizar['data'].datasets.length;
 
     chartUtilizar['data'].labels = timestamps;
-    /* for (let i = 0; i < cantidadDimensiones; i++) {
-      chartUtilizar['data'].datasets[i].data = valoresPorDimension[i];
-    } */
     this.zip(chartUtilizar['data'].datasets, valoresPorDimension)
       .map(par => par[0].data = par[1]);
+
     chartUtilizar.update();
 
     console.log(this.nivelSeleccionado);
