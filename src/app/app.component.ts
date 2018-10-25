@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { String } from 'typescript-string-operations';
 import { Chart } from 'chart.js';
@@ -57,6 +57,8 @@ export class AppComponent implements OnInit {
 
   dataSource: MatTableDataSource<PeopleData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   jsonClasificacion;
   clasificadores: string[] = [
     'Clasificador básico (SMO)',
@@ -124,6 +126,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.actualizarNombresTabla();
     this.crearGraficos();
+
+    // this.dataSource.sort = this.sort;
   }
 
   consultaResultados() {
@@ -497,6 +501,7 @@ export class AppComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource<PeopleData>(valores);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   clasificacionCSV() {
@@ -739,6 +744,7 @@ export class AppComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource<PeopleData>(clasificacionesAgrupadas);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   onFileSelectedCsv(event) {
